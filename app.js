@@ -1,17 +1,38 @@
-const {Usuario} = require("./models")
-const {init: initHandlebars} = require('./config/handlebars');
+const routes = require("./routers/route")
+// const {init: initHandlebars} = require("./config/handlebars")
+const handlebars = require('express-handlebars')
+const middlewares = require('./middlewares/middlewares')
 const express = require("express")
 const app = express()
+var session = require("express-session")
 
-initHandlebars(app)
+// initHandlebars(app)
 app.use(express.static("public"))
 
-app.get("/", async function(req, res) {
-    // const usuario = await Usuario.create({nome:"Carlos", email:"Teste@gamil.com", usuario:"Teste", senha: "123"})
-    // res.json(usuario)
-    res.render("home", {titulo: "Teste", layout: false})
-})
+app.use(session({
+    secret: 'textosecreto$asdfasdfaswwww',
+    cookie: { maxAge: 30 * 60 * 1000 }
+}));
 
-app.listen(8081, function() {
-    console.log("Subiu o servidor")
-})
+app.engine('handlebars', handlebars.engine({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(middlewares.logRegister, middlewares.sessionControl)
+app.use(routes);
+
+app.use(
+    express.urlencoded({
+        extended: true
+    })
+)
+
+app.listen(8081, function () {
+    console.log("Servidor no http://localhost:8081")
+});
+
+// app.get("/", async function(req, res) {
+//     res.render("home", {titulo: "Teste", layout: false})
+// })
