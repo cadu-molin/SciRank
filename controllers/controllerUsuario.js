@@ -5,24 +5,24 @@ const {Usuario} = require("../models")
 
 module.exports = {
     async getLogin(req, res) {
-        res.render('usuario/login', { layout: 'noMenu.handlebars' });
+        await res.render('usuario/login', { layout: 'noMenu.handlebars' });
     },
     // async getLogout(req, res) {
     //     req.session.destroy();
     //     res.redirect('/');
     // },
     async postLogin(req, res) {
-        console.log(req.body)
-        Usuario.findAll({ where: { usuario: req.body.usuario, senha: req.body.senha } }
+        await Usuario.findAll({ where: { usuario: req.body.usuario, senha: req.body.senha } }
         ).then(usuarios => {
             if (usuarios.length > 0) {
                 req.session.usuario = req.body.usuario;
-                res.render('home');
+                req.session.tipousuario = 1;
+                res.redirect('/home');
             } else
                 res.redirect('/');
         }).catch((err) => {
             console.log(err);
-        });
+        })
     }
     // ,
     // async getCreate(req, res) {
