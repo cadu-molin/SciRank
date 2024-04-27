@@ -1,6 +1,6 @@
 const handlebars = require("express-handlebars");
 
-exports.init = function (app) {
+function init(app) {
   app.engine(
     "handlebars",
     handlebars.engine({
@@ -10,3 +10,7 @@ exports.init = function (app) {
 
   app.set("view engine", "handlebars");
 };
+
+module.exports = {
+  init,
+}
