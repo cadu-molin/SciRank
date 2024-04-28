@@ -3,6 +3,7 @@ const router = express.Router()
 
 const artigoRouter = require("./ArtigoRouter")
 const loginRouter = require("./LoginRouter")
+const usuarioRouter = require("./UsuarioRouter")
 
 const tipoUsuario = require('../enums/TipoUsuario')
 
@@ -29,6 +30,7 @@ router.get("/", (req,res) => {
 
 router.use('/login', loginRouter)
 router.use('/artigo', artigoRouter)
+router.use('/usuario', usuarioRouter)
 
 //Home
 //router.get("/home", middlewares.hasAccess([1]), function (req, res) {
