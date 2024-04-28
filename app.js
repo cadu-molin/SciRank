@@ -29,7 +29,3 @@ app.use(
 app.listen(8081, function () {
     console.log("Servidor no http://localhost:8081")
 });
-
-// app.get("/", async function(req, res) {
-//     res.render("home", {titulo: "Teste", layout: false})
-// })

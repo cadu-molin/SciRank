@@ -9,6 +9,7 @@ function init(app) {
   );
 
   app.set("view engine", "handlebars");
+
 };
 
 module.exports = {

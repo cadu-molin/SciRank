@@ -15,13 +15,13 @@ module.exports = {
         await Usuario.findAll({ where: { usuario: req.body.usuario, senha: req.body.senha } }
         ).then(usuarios => {
             if (usuarios.length > 0) {
-                req.session.usuario = req.body.usuario;
-                req.session.tipousuario = 1;
-                res.redirect('/home');
+                req.session.usuario = req.body.usuario
+                req.session.tipousuario = 1
+                res.redirect('/home')
             } else
-                res.redirect('/');
+                res.redirect('/')
         }).catch((err) => {
-            console.log(err);
+            console.log(err)
         })
     }
     // ,
