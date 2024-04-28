@@ -9,9 +9,9 @@ module.exports = {
         await Usuario
                 .findAll({ where: { usuario: req.body.usuario, senha: req.body.senha } })
                 .then(usuarios => {
-                    const user = usuarios[0].dataValues
-                    
                     if (usuarios.length > 0) {
+                        const user = usuarios[0]
+
                         req.session.user = user;
                         console.log(user)
                         res.redirect('/');

@@ -23,7 +23,7 @@ module.exports = {
       },
       tipousuario: {
         type: Sequelize.INTEGER,
-        defaultValue: 1
+        defaultValue: -1
       }
     });
   },
