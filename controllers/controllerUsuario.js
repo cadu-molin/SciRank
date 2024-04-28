@@ -1,9 +1,45 @@
+const TipoUsuario = require("../enums/TipoUsuario");
 const {Usuario} = require("../models")
-
+const url = require ( 'url');
+const sequelize = require('sequelize')
     // const usuario = await Usuario.create({nome:"Carlos", email:"Teste@gamil.com", usuario:"Teste", senha: "123"})
     // res.json(usuario)
 
 module.exports = {
+
+    async getFindAll(req, res) {
+        const q = url.parse(req.url, true)
+        const queryparm = q.query.pesquisa
+        let queryModel = {
+            attributes:['idUsuario','email', 'usuario']
+        }
+
+        if (queryparm === ''){
+            queryModel = {
+                ...queryModel,
+                where:{ tipousuario: TipoUsuario.AUTOR }
+            }
+        }else{
+            queryModel = {
+                ...queryModel,
+                where:{ 
+                    tipousuario: TipoUsuario.AUTOR ,
+                    [sequelize.Op.or]: {
+                        nome: {[sequelize.Op.like]: `%${queryparm}%`},
+                        email: {[sequelize.Op.like]: `%${queryparm}%`}
+                    }
+                }
+            }
+        }
+
+        const usuarios = await Usuario.findAll(queryModel)
+            .then((usuarios)=> {
+                return usuarios.map((user)=> {
+                    return user.toJSON()
+                })})
+        console.log(usuarios)
+        res.json( usuarios )
+    }
     
     // async getLogout(req, res) {
     //     req.session.destroy();
