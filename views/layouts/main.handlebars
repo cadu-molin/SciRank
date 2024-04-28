@@ -2,11 +2,13 @@
 <html>
 <head>​
     <title>SciRank</title>​
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>​
 <body>​
     {{>menu}}
-    <center> ​
+    <p>{{options.idUsuario}}</p>
+    <p>{{options.isAdmin}}</p>
+    <center> ​ <!-- 
         <h1> SciRank </h1>​
         <h2> Sistema de gerenciamento e avaliações de artigos científicos</h2>​
         <a href="/usuarioCreate"> <button> Cadastrar Usuário</button> </a> ​
@@ -17,7 +19,7 @@
         <a href="/receitaList"> <button> Listar Receitas</button> </a>​
         <a href="/comentarioCreate"> <button> Cadastrar Comentário</button> </a> ​
         <a href="/comentarioList"> <button> Listar Comentários</button> </a>
-        <a href="/logout"> <button> Logout</button> </a>​
+        <a href="/login/logout"> <button> Logout</button> </a>​-->
         <br> <br>​
         {{{body}}}​
     </center>​

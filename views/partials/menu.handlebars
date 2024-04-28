@@ -2,14 +2,23 @@
     <h1>SciRank</h1>
     <ul class="menu">
         <li>
-            <a>Cadastro</a>
+            <a>Gerenciar</a>
             <ul class="submenu">
-                <li><a>Artigo</a></li>
-                <li><a>Usuario</a></li>
+                {{#if options.isAdmin}}
+                    <li><a href="/usuario/list">Usuario</a></li>
+                {{/if}}
+                <li>
+                    <a 
+                    href="/artigo/list"
+                    >
+                        Artigo
+                    </a>
+                </li>
             </ul>
         </li>
-        <li><a>Gerenciar</a></li>
+        
         <li><a>Sobre</a></li>
+        <li><a href="/login/logout">Logout</a></li>
     </ul>
     <span>menu</span>
 </nav>

@@ -1,5 +1,5 @@
 require('dotenv').config()
-const routes = require("./routers/route")
+const routes = require("./routers/Router")
 const {init: handlebars} = require("./config/handlebars")
 const middlewares = require('./middlewares/middlewares')
 const express = require("express")
@@ -17,7 +17,6 @@ app.use(session({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
-app.use(middlewares.sessionControl)
 app.use(routes);
 
 app.use(

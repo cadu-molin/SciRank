@@ -1,0 +1,24 @@
+<div class="artigoCreate">
+    <form action="/artigo/create" method="post">
+        <div>
+            <span class="item"> <label for="titulo"> Titulo: </label> <input type="text" name="titulo" id="titulo"></span>
+            <span class="item"> <label for="senha"> Resumo: </label> <input type="text" name="senha" id="senha"></span>
+            <span class="item"> <label for="link"> Link: </label> <input type="text" name="link" id="link"></span>
+            {{> buscarAutor}}
+            <span class="item">
+                <table>
+                    <tr>
+                        <td>&ZeroWidthSpace; &ZeroWidthSpace;</td>
+                    </tr>
+                </table>
+            </span>
+        </div>
+        <span class="btn"> <input onClick="ClickedCadastrar" type="button" value="Cadastrar"> </span>
+    </form>
+</div>
+
+<script>
+    function ClickedCadastrar(event){
+        event.preventDefault()
+    }
+</script>
