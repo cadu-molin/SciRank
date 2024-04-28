@@ -39,24 +39,19 @@ module.exports = {
                 })})
         console.log(usuarios)
         res.json( usuarios )
-    }
-    
-    // async getLogout(req, res) {
-    //     req.session.destroy();
-    //     res.redirect('/');
-    // },
-
-    // ,
-    // async getCreate(req, res) {
-    //     res.render('usuario/usuarioCreate');
-    // },
-    // async postCreate(req, res) {
-    //     Usuario.create(req.body).then(() => {
-    //         res.redirect('/home');
-    //     }).catch((err) => {
-    //         console.log(err);
-    //     });
-    // },
+    },
+    async getCreate(req, res) {
+        res.render('usuario/usuarioCreate');
+    },
+    async postCreate(req, res) {
+        console.log(req.body )
+        Usuario.create(req.body).then(() => {
+            res.redirect('/home');
+        }).catch((err) => {
+            console.log(err);
+            res.render("erro");
+        });
+    },
     // async getList(req, res) {
     //     Usuario.findAll().then(usuarios => {
     //         res.render('usuario/usuarioList', { usuarios: usuarios.map(user => user.toJSON()) });

@@ -3,7 +3,7 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('artigo', {
-      idArquivo: {
+      idArtigo: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,

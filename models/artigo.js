@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Artigo.init({
-    idArquivo: {
+    idArtigo: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
