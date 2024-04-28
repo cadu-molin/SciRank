@@ -10,20 +10,31 @@ module.exports = {
     async getFindAll(req, res) {
         const q = url.parse(req.url, true)
         const queryparm = q.query.pesquisa
+        console.log(q.query.notinAutorParm)
+        const notinIdAutor = q.query.notinAutorParm ? q.query.notinAutorParm.split(',') : [0]
+        console.log(notinIdAutor)
         let queryModel = {
-            attributes:['idUsuario','email', 'usuario']
+            attributes:['idUsuario','email', 'nome']
         }
 
         if (queryparm === ''){
             queryModel = {
                 ...queryModel,
-                where:{ tipousuario: TipoUsuario.AUTOR }
+                where:{ 
+                    tipousuario: TipoUsuario.AUTOR,
+                    idUsuario: {
+                        [sequelize.Op.notIn]: notinIdAutor
+                    }
+                 }
             }
         }else{
             queryModel = {
                 ...queryModel,
                 where:{ 
                     tipousuario: TipoUsuario.AUTOR ,
+                    idUsuario: {
+                        [sequelize.Op.notIn]: notinIdAutor
+                    },
                     [sequelize.Op.or]: {
                         nome: {[sequelize.Op.like]: `%${queryparm}%`},
                         email: {[sequelize.Op.like]: `%${queryparm}%`}
