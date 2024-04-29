@@ -1,9 +1,9 @@
 const TipoUsuario = require("../enums/TipoUsuario");
-const {Usuario} = require("../models")
-const url = require ( 'url');
+const { Usuario } = require("../models")
+const url = require('url');
 const sequelize = require('sequelize')
-    // const usuario = await Usuario.create({nome:"Carlos", email:"Teste@gamil.com", usuario:"Teste", senha: "123"})
-    // res.json(usuario)
+// const usuario = await Usuario.create({nome:"Carlos", email:"Teste@gamil.com", usuario:"Teste", senha: "123"})
+// res.json(usuario)
 
 module.exports = {
 
@@ -17,7 +17,7 @@ module.exports = {
             attributes:['idUsuario','email', 'nome']
         }
 
-        if (queryparm === ''){
+        if (queryparm === '') {
             queryModel = {
                 ...queryModel,
                 where:{ 
@@ -27,7 +27,7 @@ module.exports = {
                     }
                  }
             }
-        }else{
+        } else {
             queryModel = {
                 ...queryModel,
                 where:{ 
@@ -36,27 +36,34 @@ module.exports = {
                         [sequelize.Op.notIn]: notinIdAutor
                     },
                     [sequelize.Op.or]: {
-                        nome: {[sequelize.Op.like]: `%${queryparm}%`},
-                        email: {[sequelize.Op.like]: `%${queryparm}%`}
+                        nome: { [sequelize.Op.like]: `%${queryparm}%` },
+                        email: { [sequelize.Op.like]: `%${queryparm}%` }
                     }
                 }
             }
         }
 
         const usuarios = await Usuario.findAll(queryModel)
-            .then((usuarios)=> {
-                return usuarios.map((user)=> {
+            .then((usuarios) => {
+                return usuarios.map((user) => {
                     return user.toJSON()
-                })})
+                })
+            })
         console.log(usuarios)
-        res.json( usuarios )
+        res.json(usuarios)
     },
     async getCreate(req, res) {
         res.render('usuario/usuarioCreate');
     },
     async postCreate(req, res) {
-        console.log(req.body )
-        Usuario.create(req.body).then(() => {
+        console.log(req.body)
+        Usuario.create({
+            nome: req.body.nome,
+            email: req.body.email,
+            usuario: req.body.usuario,
+            senha: req.body.senha,
+            tipousuario: parseInt(req.body.tipousuario),
+        }).then(() => {
             res.redirect('/home');
         }).catch((err) => {
             console.log(err);
