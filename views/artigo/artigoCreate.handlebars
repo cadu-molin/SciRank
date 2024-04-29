@@ -46,7 +46,7 @@
 
     let tableListAutor = document.getElementById("list-autor-cadastro")
 
-    function ClickedCadastrar(event){
+    async function ClickedCadastrar(event){
         event.preventDefault()
 
         const artigoTitulo = document.getElementById("titulo").value
@@ -57,7 +57,7 @@
         if(tableListAutor.childNodes.length > 0){
             const arrayNode = Array.from(tableListAutor.childNodes)
             artigoAutores = arrayNode.map((child) => {
-                return child.getElementsByClassName("td-autorid")[0].innerText
+                return Number(child.getElementsByClassName("td-autorid")[0].innerText)
             })
         } else{
             artigoAutores = []
@@ -84,16 +84,27 @@
         var hrefTemplate = Handlebars.compile(`{{options.hrefCreate}}`)
         var hrefAPI = hrefTemplate({})
 
-        var headersPost = new Headers()
 
-        const response = await fetch(${hrefAPI}, {
+        const bodyEnvia = JSON.stringify(artigoEnviar) 
+
+        console.log(bodyEnvia)
+
+        const response = await fetch( `${hrefAPI}`, {
             method: 'POST',
-            headers:headersPost,
-            mode: "cors",
-            body: {
-                artigoEnviar
-            }
+            headers: {"Content-type": "application/json; charset=UTF-8"},
+            body: bodyEnvia
+            
         })
+
+        console.log(response)
+
+        const data = await response.json()
+
+        console.log(data)
+
+        if(response.status === 200){
+            window.location.href = '/'
+        }
 
     }
 

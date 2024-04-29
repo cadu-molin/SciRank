@@ -16,19 +16,21 @@ module.exports = (sequelize, DataTypes) => {
       }),
       AutorArtigo.hasOne(models.Usuario, {
         foreignKey: "idUsuario",
-        sourceKey: "idUsuario"
+        sourceKey: "idAutor"
       })
     }
   }
   AutorArtigo.init({
     idAutor: {
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    idUsuario: DataTypes.INTEGER,
-    idArtigo: DataTypes.INTEGER
+    idArtigo: {
+      allowNull: false,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    }
   }, {
     sequelize,
     modelName: 'AutorArtigo',

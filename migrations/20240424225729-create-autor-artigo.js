@@ -5,14 +5,12 @@ module.exports = {
     await queryInterface.createTable('autor_artigo', {
       idAutor: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      idUsuario: {
-        type: Sequelize.INTEGER
-      },
       idArtigo: {
+        allowNull: false,
+        primaryKey: true,
         type: Sequelize.INTEGER
       }
     });
