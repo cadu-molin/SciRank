@@ -3,25 +3,29 @@
         <form class="form" action="/usuario/update" method="post">
             <div class="form-header">
                 <div class="title">
-                    <h1>Cadastro de Usuário</h1>
+                    <h1>Alteração de Usuário</h1>
                 </div>
             </div>
             <div class="input-group">
                 <div class="input-box">
+                    <label for="idUsuario">Código</label>
+                    <input type="readonly" name="idUsuario" value={{usuario.idUsuario}}>
+                </div>
+                <div class="input-box">
                     <label for="nome">Nome</label>
-                    <input id="nome" type="text" name="nome" required>
+                    <input id="nome" type="text" name="nome" value="{{usuario.nome}}" required>
                 </div>
                 <div class="input-box">
                     <label for="usuario">Usuário</label>
-                    <input id="usuario" type="text" name="usuario" required>
+                    <input id="usuario" type="text" name="usuario" value="{{usuario.usuario}}" required>
                 </div>
                 <div class="input-box">
                     <label for="senha">Senha</label>
-                    <input id="senha" type="password" name="senha" required>
+                    <input id="senha" type="password" name="senha" value="{{usuario.senha}}" required>
                 </div>
                 <div class="input-box">
                     <label for="email">E-mail</label>
-                    <input id="email" type="email" name="email" required>
+                    <input id="email" type="email" name="email" value="{{usuario.email}}" required>
                 </div>
             </div>
             <div class="tipo-inputs">

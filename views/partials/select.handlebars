@@ -1,0 +1,6 @@
+<select name="{{name}}" required>
+    {{#if default}}<option value="{{defaultValue}}" selected disabled hidden>{{defaultText}}</option>{{/if}}
+    {{#each options}}
+        <option value="{{value}}" {{#if selected}}selected{{/if}}>{{text}}</option>
+    {{/each}}
+</select>
