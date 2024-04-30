@@ -1,0 +1,24 @@
+<div class="bodyUsuario">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">Usuário</th>
+                <th scope="col">Tipo Usuário</th>
+                <th scope="col">Editar</th>
+                <th scope="col">Deletar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each usuarios}}
+            <tr>
+                <td>{{nome}}</td>
+                <td>{{usuario}}</td>
+                <td>{{tipousuario}}</td>
+                <td><a href="/usuario/update/{{idUsuario}}">Editar</a></td>
+                <td><a href="/usuario/delete/{{idUsuario}}">Deletar</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

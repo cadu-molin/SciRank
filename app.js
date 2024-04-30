@@ -17,6 +17,16 @@ app.use(session({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
+app.use((req, res, next) => {
+    if(req.url == '/login') {
+        return next()
+    }
+    if(!req.session.user?.idUsuario) {
+        return res.redirect("/login")
+    }
+    next();
+  });
+
 app.use(routes);
 
 app.use(
