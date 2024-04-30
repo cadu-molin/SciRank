@@ -13,8 +13,6 @@ router.get("/", (req,res) => {
         isAdmin: req.session.user?.tipousuario === tipoUsuario.ADMIN
     }
 
-    console.log(tipoUsuario.ADMIN)
-    console.log(userSession)
 
     if(userSession.idUsuario){
         res.render('home', { 
