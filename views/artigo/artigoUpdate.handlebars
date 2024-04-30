@@ -1,9 +1,10 @@
 <div class="artigoCreate">
     <form id="formArtigoCreate" action="/artigo/create" method="post"> </form>
-    <span class="item"> <label for="titulo"> Titulo: </label> <input form="formArtigoCreate" type="text" name="titulo" id="titulo"></span>
-    <span class="item"> <label for="senha"> Resumo: </label> <input form="formArtigoCreate" type="text" name="resumo" id="resumo"></span>
-    <span class="item"> <label for="link"> Link: </label> <input form="formArtigoCreate" type="text" name="link" id="link"></span>
-    
+    <span class="item"> <label for="titulo"> Titulo: </label> <input form="formArtigoCreate" type="hidden" name="idArtigo" id="idArtigo" value="{{artigo.idArtigo}}"></span>
+    <span class="item"> <label for="titulo"> Titulo: </label> <input form="formArtigoCreate" type="text" name="titulo" id="titulo" value="{{artigo.titulo}}"></span>
+    <span class="item"> <label for="senha"> Resumo: </label> <input form="formArtigoCreate" type="text" name="resumo" id="resumo" value="{{artigo.resumo}}"></span>
+    <span class="item"> <label for="link"> Link: </label> <input form="formArtigoCreate" type="text" name="link" id="link" value="{{artigo.link}}"></span>
+    <div class="item"> <label for="link"> Status: </label> <span id="status" >{{artigo.statusNome}}</span></div>
     <span class="buscaAutor item"> 
         <label for="autores"> Autores: </label> 
         <input onkeypress="inputAutoresPesquisar(event)" type="text" name="autores" id="autores" >
@@ -30,7 +31,15 @@
 
     <span class="item" style="background-color: #fff;">
         <table  style="color: black;">
-            <tbody id="list-autor-cadastro"></tbody>
+            <tbody id="list-autor-cadastro">
+                {{#each artigo.autores}}
+                <tr>
+                    <td>{{idAutor}}</td>
+                    <td>{{nome}}</td>
+                    <td>{{email}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
         </table>
     </span>
     <span class="btn"> <input onclick="ClickedCadastrar(event)" type="button" value="Cadastrar"> </span>
