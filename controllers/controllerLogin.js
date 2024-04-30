@@ -13,7 +13,6 @@ module.exports = {
                         const user = usuarios[0]
 
                         req.session.user = user;
-                        console.log(user)
                         res.redirect('/');
                     } else
                         res.redirect('/');
