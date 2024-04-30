@@ -87,7 +87,6 @@
 
         const bodyEnvia = JSON.stringify(artigoEnviar) 
 
-        console.log(bodyEnvia)
 
         const response = await fetch( `${hrefAPI}`, {
             method: 'POST',
@@ -96,11 +95,9 @@
             
         })
 
-        console.log(response)
 
         const data = await response.json()
 
-        console.log(data)
 
         if(response.status === 200){
             window.location.href = '/'
@@ -116,7 +113,7 @@
     async function pesquisarPopup(event){
 
         event.preventDefault()
-        
+
         var hrefTemplate = Handlebars.compile(`{{options.hrefTemplate}}`)
         var hrefAPI = hrefTemplate({})
 
@@ -138,7 +135,9 @@
         notinAutorParm = !notinAutor ? '' : `&notinAutorParm=${notinAutor.join(',')}`
 
         const response = await fetch(`${hrefAPI}?pesquisa=${valorPesquisa}${notinAutorParm}`)
+        console.log(response)
         const usuarios = await response.json()
+        console.log(usuarios)
 
         if(usuarios.length > 0) {
             usuarios.map((usuario) => {
@@ -169,14 +168,16 @@
         const autorNome = row.getElementsByClassName("td-autornome")[0].innerText
 
         var tableRowAutor = document.createElement('tr')
-        tableRowAutor.innerHTML = `<td style="width:30%;" class="td-autorid">${autorId}</td><td style="width:60%;" class="td-autornome">${autorNome}</td><td style="width:10%; cursor: pointer;">Deletar</td>`
+        tableRowAutor.innerHTML = `<td style="width:30%;" class="td-autorid">${autorId}</td><td style="width:60%;" class="td-autornome">${autorNome}</td><td class="deletar" style="width:10%; cursor: pointer;">Deletar</td>`
         tableListAutor.appendChild(tableRowAutor)
-        tableRowAutor.addEventListener('click', ()=>deletarAutor(tableRowAutor))
+        const tdDeletar = tableRowAutor.getElementsByClassName('deletar')[0]
+        tdDeletar.addEventListener('click', ()=>deletarAutor(tableRowAutor))
 
         fecharPopUp()
     }
 
     function deletarAutor(row){
+        console.log(row)
         row.remove()
     }
 

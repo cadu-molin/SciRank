@@ -11,9 +11,7 @@ module.exports = {
     async getFindAll(req, res) {
         const q = url.parse(req.url, true)
         const queryparm = q.query.pesquisa
-        console.log(q.query.notinAutorParm)
         const notinIdAutor = q.query.notinAutorParm ? q.query.notinAutorParm.split(',') : [0]
-        console.log(notinIdAutor)
         let queryModel = {
             attributes:['idUsuario','email', 'nome']
         }
@@ -63,7 +61,6 @@ module.exports = {
         });
     },
     async postCreate(req, res) {
-        console.log(req.body)
         Usuario.create({
             nome: req.body.nome,
             email: req.body.email,
