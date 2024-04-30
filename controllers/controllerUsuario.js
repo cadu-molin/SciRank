@@ -67,16 +67,16 @@ module.exports = {
             res.redirect('/home');
         }).catch((err) => {
             console.log(err);
-            res.render("erro");
+            res.render("erro")
         });
     },
-    // async getList(req, res) {
-    //     Usuario.findAll().then(usuarios => {
-    //         res.render('usuario/usuarioList', { usuarios: usuarios.map(user => user.toJSON()) });
-    //     }).catch((err) => {
-    //         console.log(err);
-    //     });
-    // },
+    async listAll(req, res) {
+        Usuario.findAll().then(usuarios => {
+            res.render('usuario/usuarioList', { usuarios: usuarios.map(user => user.toJSON()) });
+        }).catch((err) => {
+            console.log(err);
+        });
+    },
     // async getUpdate(req, res) {
     //     await Usuario.findByPk(req.params.idUsuario).then(
     //         usuario => res.render('usuario/usuarioUpdate', { usuario: usuario.dataValues })
@@ -91,11 +91,12 @@ module.exports = {
     //         console.log(err);
     //     });
     // },
-    // async getDelete(req, res) {
-    //     await Usuario.destroy({ where: { idUsuario: req.params.idUsuario } }).then(
-    //         res.render('home')
-    //     ).catch(err => {
-    //         console.log(err);
-    //     });
-    // }
+    async getDelete(req, res) {
+        console.log(req.params.idUsuario)
+        await Usuario.destroy({ where: { idUsuario: req.params.idUsuario } }).then(
+            res.redirect('/usuario/listAll')
+        ).catch(err => {
+            console.log(err);
+        });
+    }
 }   
