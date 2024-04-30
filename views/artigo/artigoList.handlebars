@@ -1,4 +1,5 @@
 <div>
+    <div><a href="/artigo/create">Criar novo artigo</a></div>
     <table >
         <thead>
             <tr>
@@ -14,11 +15,11 @@
             {{#each artigos}}
             <tr>
                 <td>{{titulo}}</td>
-                <td>{{idAutor}}</td>
+                <td>{{nomeAutores}}</td>
                 <td>{{link}}</td>
                 <td>{{status}}</td>
-                <td><a href="usuarioUpdate/{{idArtigo}}">Editar</a></td>
-                <td><a href="usuarioDelete/{{idArtigo}}">Deletar</a></td>
+                <td><a href="/artigo/update/{{idArtigo}}">Editar</a></td>
+                <td><a href="/artigo/delete/{{idArtigo}}">Deletar</a></td>
             </tr>
             {{/each}}
         </tbody>

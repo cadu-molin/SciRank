@@ -45,6 +45,25 @@ async function postCreate(req,res){
 
 }
 
+async function getDelete(req, res){
+    await Artigo.destroy({ where: { idArtigo: req.params.idArtigo } }).then(
+        AutorArtigo.destroy({where: { idArtigo: req.params.idArtigo }}).then(
+            res.redirect('/artigo/list')
+        ).catch(err => console.log(err))
+    ).catch(err => {
+        console.log(err);
+    });
+}
+
+async function getUpdate(req, res){
+
+    const artigo = await findbyPK(req.params.idArtigo)
+
+    res.render('artigo/artigoUpdate', {
+        artigo: artigo
+    })
+}
+
 async function getList(req, res){
 
     const usuario = req.session.user
@@ -73,34 +92,78 @@ async function findByUsuario(idUsuario){
             where:{
                 idAutor: idUsuario
             },
-            include:{
-                attributes:['nome'],
-                model:Usuario
-            }
         },
         
     })
     const autorArtigos = res.map( art => art.toJSON())
-    console.log(autorArtigos[0].AutorArtigos)
-    const artigos = autorArtigos.map( artigo =>{
+    const artigos = await Promise.all(autorArtigos.map( async (artigo) => {
+
+        const autoresBanco = await AutorArtigo.findAll({
+            where:{
+                idArtigo: artigo.idArtigo
+            },
+            include:{
+                attributes:['nome'],
+                model:Usuario
+            }
+        })
+
+        const autores = autoresBanco.map(autoresArtigo => autoresArtigo.toJSON())
+
         return { 
-            idAutor: artigo.AutorArtigos.map( autor => autor.idAutor).join(', '), 
-            nomeAutor: artigo.AutorArtigos.map( autor => autor.Usuario.nome).join(', '),
+            autores: autores, 
+            nomeAutores: autores.map( autor => autor.Usuario.nome).join(', '),
             idArtigo: artigo.idArtigo,
             titulo: artigo.titulo,
             link: artigo.link,
-            status: artigo.status,
+            status: statusArtigoEnum.toString(artigo.status),
+        }
+    }))
+
+    return artigos
+}
+
+async function findbyPK(idArtigo){
+    const resArtigo = await Artigo.findByPk(idArtigo)
+
+    const artigo = resArtigo.dataValues
+
+    const resAutoresArtigo = await AutorArtigo.findAll({
+        where:{
+            idArtigo: idArtigo
+        },
+        include:{
+            attributes: ['nome', 'email'],
+            model: Usuario
         }
     })
 
-    console.log(artigos)
+    const autoresArtigo = resAutoresArtigo
+            .map( autArt => autArt.toJSON())
+            .map( autArt => {
+                return {
+                    idAutor: autArt.idAutor,
+                    nome: autArt.Usuario.nome,
+                    email: autArt.Usuario.email,
+                }
+            })
 
-    return artigos
+    const artigo_return = {
+        ...artigo,
+        statusNome: statusArtigoEnum.toString(artigo.status),
+        autores: autoresArtigo
+    }
+
+    console.log(artigo_return)
+
+    return artigo_return
 }
 
 module.exports = {
     getCreate,
     postCreate,
     getList,
+    getDelete,
+    getUpdate,
     findByUsuario,
 }
