@@ -1,6 +1,6 @@
 <div class="artigoCreate">
     <form id="formArtigoCreate" action="/artigo/create" method="post"> </form>
-    <span class="item"> <label for="titulo"> Titulo: </label> <input form="formArtigoCreate" type="hidden" name="idArtigo" id="idArtigo" value="{{artigo.idArtigo}}"></span>
+    <input form="formArtigoCreate" type="hidden" name="idArtigo" id="idArtigo" value="{{artigo.idArtigo}}">
     <span class="item"> <label for="titulo"> Titulo: </label> <input form="formArtigoCreate" type="text" name="titulo" id="titulo" value="{{artigo.titulo}}"></span>
     <span class="item"> <label for="senha"> Resumo: </label> <input form="formArtigoCreate" type="text" name="resumo" id="resumo" value="{{artigo.resumo}}"></span>
     <span class="item"> <label for="link"> Link: </label> <input form="formArtigoCreate" type="text" name="link" id="link" value="{{artigo.link}}"></span>
@@ -34,15 +34,15 @@
             <tbody id="list-autor-cadastro">
                 {{#each artigo.autores}}
                 <tr>
-                    <td>{{idAutor}}</td>
-                    <td>{{nome}}</td>
-                    <td>{{email}}</td>
+                    <td class="td-autorid">{{idAutor}}</td>
+                    <td class="td-autornome">{{nome}}</td>
+                    <td class="deletar" style="width:10%; cursor: pointer;">Deletar</td>
                 </tr>
                 {{/each}}
             </tbody>
         </table>
     </span>
-    <span class="btn"> <input onclick="ClickedCadastrar(event)" type="button" value="Cadastrar"> </span>
+    <span class="btn"> <input onclick="ClickedSalvar(event)" type="button" value="Salvar"> </span>
 </div>
 
 
@@ -55,12 +55,24 @@
 
     let tableListAutor = document.getElementById("list-autor-cadastro")
 
-    async function ClickedCadastrar(event){
+    const rowstableListAutor = Array.from(tableListAutor.childNodes)
+
+    rowstableListAutor.map( element => {
+        if(element.nodeName === 'TR'){
+            const tdDeletar = element.getElementsByClassName('deletar')[0]
+            tdDeletar.addEventListener('click', ()=>deletarAutor(element))
+        }else{
+            element.remove()
+        }
+    })
+
+    async function ClickedSalvar(event){
         event.preventDefault()
 
         const artigoTitulo = document.getElementById("titulo").value
         const artigoResumo = document.getElementById("resumo").value
         const artigoLink = document.getElementById("link").value
+        const idArtigo = Number(document.getElementById("idArtigo").value)
         let artigoAutores
 
         if(tableListAutor.childNodes.length > 0){
@@ -87,10 +99,13 @@
         if(!artigoAutores){
             return
         }
+        if(!idArtigo){
+            return
+        }
 
-        const artigoEnviar = { artigoTitulo, artigoResumo, artigoLink, artigoAutores }
+        const artigoEnviar = { idArtigo, artigoTitulo, artigoResumo, artigoLink, artigoAutores }
 
-        var hrefTemplate = Handlebars.compile(`{{options.hrefCreate}}`)
+        var hrefTemplate = Handlebars.compile(`{{options.hrefUpdate}}`)
         var hrefAPI = hrefTemplate({})
 
 
@@ -144,9 +159,9 @@
         notinAutorParm = !notinAutor ? '' : `&notinAutorParm=${notinAutor.join(',')}`
 
         const response = await fetch(`${hrefAPI}?pesquisa=${valorPesquisa}${notinAutorParm}`)
-        console.log(response)
         const usuarios = await response.json()
-        console.log(usuarios)
+
+        console.log(usuarios.length)
 
         if(usuarios.length > 0) {
             usuarios.map((usuario) => {
