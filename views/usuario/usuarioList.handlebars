@@ -1,4 +1,7 @@
 <div class="bodyUsuario">
+    <div class="filter">
+        {{!--  --}}
+    </div>
     <table class="table">
         <thead>
             <tr>
@@ -15,8 +18,8 @@
                 <td>{{nome}}</td>
                 <td>{{usuario}}</td>
                 <td>{{tipousuario}}</td>
-                <td><a href="/usuario/update/{{idUsuario}}">Editar</a></td>
-                <td><a href="/usuario/delete/{{idUsuario}}">Deletar</a></td>
+                <td class="edit" ><a href="/usuario/update/{{idUsuario}}">Editar</a></td>
+                <td class="delete"><a href="/usuario/delete/{{idUsuario}}">Deletar</a></td>
             </tr>
             {{/each}}
         </tbody>

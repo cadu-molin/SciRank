@@ -175,14 +175,6 @@ a:visited {
     color: #fff;
 }
 
-table{
-    width: 100%;
-}
-
-table, td, tr {
-    border: 1px solid #c7c7c7;
-}
-
 .menu {
     margin: 0;
     padding: 0;
@@ -514,3 +506,80 @@ table, td, tr {
 }
 
 /* usuarioCreate FIM */
+
+/* Estilização da tabela INICIO */
+
+/* .filter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+} */
+
+/* table{
+    width: 100%;
+}
+
+table, td, tr {
+    border: 1px solid #c7c7c7;
+} */
+
+table {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(32, 32, 32, 0.3);
+    text-align: center;
+    background: #fafafa;
+    border: 1px solid #000000 ;
+}
+
+th, td {
+    padding: 10px 15px;
+    border: 1px solid #000000 ;
+}
+
+th {
+    background: #343950;
+    color: #fafafa;
+    text-transform: uppercase;
+}
+
+tr:nth-child(odd) {
+    background-color: #c0c0c0;
+}
+
+tr {
+    color: #000000;
+}
+
+.edit {
+    background-color: green;
+    font-weight: bold;
+}
+
+.delete {
+    background-color: red;
+    font-weight: bold;
+}
+
+.edit > a {
+    /* color: #000000; */
+    background-color: green;
+}
+
+.delete > a {
+    /* color: #000000; */
+    background-color: red;
+}
+
+/* Estilização da tabela FIM */
