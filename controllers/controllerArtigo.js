@@ -38,7 +38,7 @@ async function postCreate(req,res){
         responseBulk = await AutorArtigo.bulkCreate(artigoAutorInsert)    
     } catch (error) {
         console.log(error)
-        return res.status(500).send(errpor)
+        return res.status(500).send(error)
     }
 
     res.status(200).send({options:{response: artigoAutorInsert}})
@@ -60,8 +60,39 @@ async function getUpdate(req, res){
     const artigo = await findbyPK(req.params.idArtigo)
 
     res.render('artigo/artigoUpdate', {
+        options:{
+            hrefTemplate: '/usuario/getFindAll',
+            hrefUpdate: '/artigo/update'
+        },
         artigo: artigo
     })
+}
+
+async function postUpdate(req, res){
+
+    const {idArtigo, artigoTitulo, artigoResumo, artigoLink, artigoAutores } = req.body
+
+    const resArtigo = await Artigo.update({
+        titulo: artigoTitulo,
+        resumo: artigoResumo,
+        link: artigoLink,
+        },
+        {
+            where: {idArtigo}
+        }
+    )
+    const resDeleteAutorArtigo = await AutorArtigo.destroy({
+        where: {idArtigo}
+    })
+
+    const artigoAutorInsert = artigoAutores.map( (autor) => {
+        return { idAutor: autor, idArtigo: Number(idArtigo) }
+    });
+
+    const resAutorArtigo = await AutorArtigo.bulkCreate(artigoAutorInsert)
+
+    res.status(200).send({options:{response: artigoAutorInsert}})
+
 }
 
 async function getList(req, res){
@@ -165,5 +196,6 @@ module.exports = {
     getList,
     getDelete,
     getUpdate,
+    postUpdate,
     findByUsuario,
 }

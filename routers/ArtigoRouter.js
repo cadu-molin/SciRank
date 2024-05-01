@@ -7,6 +7,7 @@ router.get("/create", controllerArtigo.getCreate)
 router.post("/create", controllerArtigo.postCreate)
 router.get('/delete/:idArtigo', controllerArtigo.getDelete)
 router.get('/update/:idArtigo', controllerArtigo.getUpdate)
+router.post('/update', controllerArtigo.postUpdate)
 
 router.get("/list", controllerArtigo.getList)
 

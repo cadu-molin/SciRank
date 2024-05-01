@@ -12,6 +12,6 @@ router.get("/update/:idUsuario", middlewares.hasAccess([TipoUsuarioEnum.ADMIN]),
 router.post("/update", middlewares.hasAccess([TipoUsuarioEnum.ADMIN]), controllerUsuario.postUpdate);
 router.get('/delete/:idUsuario', middlewares.hasAccess([TipoUsuarioEnum.ADMIN]), controllerUsuario.getDelete)
 
-router.get('/getFindAll', middlewares.hasAccess([TipoUsuarioEnum.ADMIN]), controllerUsuario.getFindAll)
+router.get('/getFindAll', controllerUsuario.getFindAll)
 
 module.exports = router
