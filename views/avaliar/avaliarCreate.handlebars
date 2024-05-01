@@ -1,0 +1,40 @@
+<div class="bodyUsuario">
+    <div class="usuarioCreate">
+        <form class="form" action="/avaliar/update" method="post">
+            <div class="form-header">
+                <div class="title">
+                    <h1>Cadastro de Usuário</h1>
+                </div>
+            </div>
+            <div class="input-group">
+                <div class="input-box">
+                    <label for="nome">Nome</label>
+                    <input id="nome" type="text" name="nome" required>
+                </div>
+                <div class="input-box">
+                    <label for="usuario">Usuário</label>
+                    <input id="usuario" type="text" name="usuario" required>
+                </div>
+                <div class="input-box">
+                    <label for="senha">Senha</label>
+                    <input id="senha" type="password" name="senha" required>
+                </div>
+                <div class="input-box">
+                    <label for="email">E-mail</label>
+                    <input id="email" type="email" name="email" required>
+                </div>
+            </div>
+            <div class="tipo-inputs">
+                <div class="tipo-title">
+                    <h6>Tipo de Usuário</h6>
+                </div>
+                <div class="tipo-group">
+                    {{>select name="tipousuario" options=select.user.options}}
+                </div>
+            </div>
+            <div class="continue-button">
+                <button class="button">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
