@@ -10,7 +10,9 @@ const tipoUsuario = require('../enums/TipoUsuario')
 function defaultPorperties(req, res, next) {
     res.locals = {
         session: {
-            isAdmin: req.session.user?.tipousuario === tipoUsuario.ADMIN
+            isAdmin: req.session.user?.tipousuario === tipoUsuario.ADMIN,
+            isAutor: req.session.user?.tipousuario === tipoUsuario.isAutor,
+            isAvalidador: req.session.user?.tipousuario === tipoUsuario.isAvalidador,
         }
     }
     next()
