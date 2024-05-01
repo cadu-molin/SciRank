@@ -120,9 +120,6 @@ body {
 
 /* Login INICIO */
 
-
-
-
 /* Menu INICIO */
 
 ul {
@@ -270,7 +267,6 @@ table, td, tr {
 
 /* Menu FIM */
 
-
 /* artigoCreate */
 
 .artigoCreate{
@@ -371,7 +367,7 @@ table, td, tr {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 3rem;
+    padding: 1rem;
 }
 
 .form-header {
@@ -405,7 +401,7 @@ table, td, tr {
 
 .input-box input {
     margin: 0.6rem 0;
-    padding: 0.8rem 1.2rem;
+    padding: 0.4rem 1.2rem;
     border: none;
     border-radius: 10px;
     box-shadow: 1px 1px 6px #0000001c;
@@ -444,27 +440,27 @@ table, td, tr {
     justify-content: space-between;
     margin-top: 1rem;
     margin-bottom: 3rem;
-    padding: 0 .5rem;
+}
+
+.tipo-group select {
+    width: 100%;
+    text-align: center;
+    margin: 0.6rem 0;
+    padding: 0.35rem 1.2rem;
+    font-size: 0.8rem;
+    border-radius: 10px;
 }
 
 .tipo-inputs {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    width: 100%;
 }
 
 .tipo-input {
     display: flex;
     align-items: center;
-}
-
-.tipo-input input {
-    margin-right: 0.35rem;
-}
-
-.tipo-input label {
-    font-size: 0.81rem;
-    font-weight: 600;
 }
 
 @media screen and (max-width: 1330px) {

@@ -3,6 +3,7 @@ const { Usuario } = require("../models")
 const url = require('url');
 const sequelize = require('sequelize');
 const TipoUsuarioJSON = require('../utils/TipoUsuarioJSON')
+const TipoUsuarioEnum = require('../enums/TipoUsuario')
 // const usuario = await Usuario.create({nome:"Carlos", email:"Teste@gamil.com", usuario:"Teste", senha: "123"})
 // res.json(usuario)
 
@@ -76,7 +77,10 @@ module.exports = {
     },
     async listAll(req, res) {
         Usuario.findAll().then(usuarios => {
-            res.render('usuario/usuarioList', { usuarios: usuarios.map(user => user.toJSON()) });
+            res.render('usuario/usuarioList', { usuarios: usuarios.map((user) => {
+                let registro = user.toJSON()
+                return {...registro, tipousuario: TipoUsuarioEnum.toString(registro.tipousuario)}
+            })});
         }).catch((err) => {
             console.log(err);
         });

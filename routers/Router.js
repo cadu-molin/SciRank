@@ -7,10 +7,20 @@ const usuarioRouter = require("./UsuarioRouter")
 
 const tipoUsuario = require('../enums/TipoUsuario')
 
+function defaultPorperties(req, res, next) {
+    res.locals = {
+        session: {
+            isAdmin: req.session.user?.tipousuario === tipoUsuario.ADMIN
+        }
+    }
+    next()
+}
+
+router.use(defaultPorperties)
+
 router.get("/", (req,res) => {
     const userSession = { 
-        ...req.session.user, 
-        isAdmin: req.session.user?.tipousuario === tipoUsuario.ADMIN
+        ...req.session.user
     }
 
 
