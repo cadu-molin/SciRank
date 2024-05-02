@@ -6,6 +6,7 @@ const middlewares = require('../middlewares/middlewares')
 const artigoRouter = require("./ArtigoRouter")
 const loginRouter = require("./LoginRouter")
 const usuarioRouter = require("./UsuarioRouter")
+const avaliarArtigo = require("./AvaliarArtigo")
 
 const tipoUsuario = require('../enums/TipoUsuario')
 
@@ -42,6 +43,7 @@ router.get("/", (req,res) => {
 router.use('/login', loginRouter)
 router.use('/artigo', artigoRouter)
 router.use('/usuario', usuarioRouter)
+router.use('/avaliar', avaliarArtigo)
 
 //Home
 //router.get("/home", middlewares.hasAccess([1]), function (req, res) {

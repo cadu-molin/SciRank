@@ -3,33 +3,29 @@
         <form class="form" action="/avaliar/update" method="post">
             <div class="form-header">
                 <div class="title">
-                    <h1>Cadastro de Usuário</h1>
+                    <h1>Avaliar Artigo</h1>
                 </div>
             </div>
             <div class="input-group">
                 <div class="input-box">
-                    <label for="nome">Nome</label>
-                    <input id="nome" type="text" name="nome" required>
+                    <label for="idAvaliacao">Código</label>
+                    <input type="readonly" name="idAvaliacao" value={{avaliar.idAvaliacao}}>
+                </div>
+                <div class="input-box">
+                    <label for="titulo">Título do Artigo</label>
+                    <input id="titulo" type="readonly" name="titulo" value={{avaliar.titulo}}>
                 </div>
                 <div class="input-box">
                     <label for="usuario">Usuário</label>
-                    <input id="usuario" type="text" name="usuario" required>
+                    <input id="usuario" type="readonly" name="usuario" value={{avaliar.usuario}}>
                 </div>
                 <div class="input-box">
-                    <label for="senha">Senha</label>
-                    <input id="senha" type="password" name="senha" required>
+                    <label for="notaRelevancia">Nota 1</label>
+                    <input id="notaRelevancia" type="number" name="notaRelevancia" value={{avaliar.notaRelevancia}} required>
                 </div>
                 <div class="input-box">
-                    <label for="email">E-mail</label>
-                    <input id="email" type="email" name="email" required>
-                </div>
-            </div>
-            <div class="tipo-inputs">
-                <div class="tipo-title">
-                    <h6>Tipo de Usuário</h6>
-                </div>
-                <div class="tipo-group">
-                    {{>select name="tipousuario" options=select.user.options}}
+                    <label for="notaExperiencia">Nota 2</label>
+                    <input id="notaExperiencia" type="number" name="notaExperiencia" value={{avaliar.notaExperiencia}} required>
                 </div>
             </div>
             <div class="continue-button">
