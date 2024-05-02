@@ -1,13 +1,17 @@
 <div>
-    <div><a href="/artigo/create">Criar novo artigo</a></div>
     <table >
         <thead>
             <tr>
-                <th>Autores</th>
+                <th>Titulo</th>
                 <th>Autores</th>
                 <th>Link</th>
                 <th>Status</th>
+                {{#if session.isAutor}}
                 <th>Editar</th>
+                {{/if}}
+                {{#if session.isAdmin}}
+                <th>Avaliador</th>
+                {{/if}}
                 <th>Deletar</th>
             </tr>
         </thead>
@@ -18,7 +22,12 @@
                 <td>{{nomeAutores}}</td>
                 <td>{{link}}</td>
                 <td>{{status}}</td>
+                {{#if ../session.isAutor}}
                 <td><a href="/artigo/update/{{idArtigo}}">Editar</a></td>
+                {{/if}}
+                {{#if ../session.isAdmin}}
+                <td><a href="/artigo/avaliador/{{idArtigo}}">Avaliar</a></td>
+                {{/if}}
                 <td><a href="/artigo/delete/{{idArtigo}}">Deletar</a></td>
             </tr>
             {{/each}}

@@ -13,6 +13,7 @@ module.exports = {
         const q = url.parse(req.url, true)
         const queryparm = q.query.pesquisa
         const notinIdAutor = q.query.notinAutorParm ? q.query.notinAutorParm.split(',') : [0]
+        const tipoUsuarioPesquisa = q.query.tipousuario ? q.query.tipousuario : TipoUsuario.AUTOR
         let queryModel = {
             attributes:['idUsuario','email', 'nome']
         }
@@ -21,7 +22,7 @@ module.exports = {
             queryModel = {
                 ...queryModel,
                 where:{ 
-                    tipousuario: TipoUsuario.AUTOR,
+                    tipousuario: tipoUsuarioPesquisa,
                     idUsuario: {
                         [sequelize.Op.notIn]: notinIdAutor
                     }
@@ -31,7 +32,7 @@ module.exports = {
             queryModel = {
                 ...queryModel,
                 where:{ 
-                    tipousuario: TipoUsuario.AUTOR ,
+                    tipousuario: tipoUsuarioPesquisa ,
                     idUsuario: {
                         [sequelize.Op.notIn]: notinIdAutor
                     },
