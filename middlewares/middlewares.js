@@ -4,7 +4,7 @@ module.exports = {
             if(tipoUsuario.includes(req.session.user.tipousuario)) {
                 next()
             }else {
-                res.render("erro")
+                res.render("erro", {mensagem: "Usuário Inválido"})
             }
         }
     },

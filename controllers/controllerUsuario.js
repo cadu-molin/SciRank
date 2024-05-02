@@ -73,7 +73,7 @@ module.exports = {
             res.redirect('/usuario/listAll')
         }).catch((err) => {
             console.log(err);
-            res.render("erro")
+            res.render("erro", {mensagem: "Erro ao criar o Usuário:\n" + err.message})
         });
     },
     async listAll(req, res) {
@@ -84,6 +84,7 @@ module.exports = {
             })});
         }).catch((err) => {
             console.log(err);
+            res.render("erro", {mensagem: "Erro ao carregar os dados do Usuário:\n" + err.message})
         });
     },
     async getUpdate(req, res) {
@@ -101,6 +102,7 @@ module.exports = {
         }
         ).catch(function (err) {
             console.log(err);
+            res.render("erro", {mensagem: "Erro ao carregar os dados do Usuário:\n" + err.message})
         });
     },
     async postUpdate(req, res) {
@@ -116,6 +118,7 @@ module.exports = {
             res.redirect('/usuario/listAll')
         ).catch(err => {
             console.log(err);
+            res.render("erro", {mensagem: "Erro ao atualizar os dados do Usuário:\n" + err.message})
         });
     }
 }   

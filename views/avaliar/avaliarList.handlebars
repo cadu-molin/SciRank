@@ -1,0 +1,26 @@
+<div class="bodyUsuario">
+    <div class="filter">
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Artigo</th>
+                <th scope="col">Usuário</th>
+                <th scope="col">Nota 1</th>
+                <th scope="col">Nota 2</th>
+                <th scope="col">Avaliar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each avaliacao}}
+            <tr>
+                <td>{{titulo}}</td>
+                <td>{{usuario}}</td>
+                <td>{{notaRelevancia}}</td>
+                <td>{{notaExperiencia}}</td>
+                <td class="edit"><a href="/avaliar/update/{{idAvaliacao}}">Avaliar</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

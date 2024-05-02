@@ -45,28 +45,4 @@ router.use('/artigo', artigoRouter)
 router.use('/usuario', usuarioRouter)
 router.use('/avaliar', avaliarArtigo)
 
-//Home
-//router.get("/home", middlewares.hasAccess([1]), function (req, res) {
-//    if (req.session.usuario) {
-//        res.render('home')
-//    }
-//    else
-//        res.redirect('/')
-//})
-
-//Artigo
-// route.get("/", controllerArtigo)
-// route.post("/", controllerArtigo)
-
-//Usuario
-//router.get("/", controllerUsuario.getLogin)
-//router.post("/login", controllerUsuario.postLogin)
-// route.get("/logout", controllerUsuario.getLogout)
-// route.get("/usuarioCreate", controllerUsuario.getCreate)
-// route.post("/usuarioCreate", controllerUsuario.postCreate)
-// route.get("/usuarioList", controllerUsuario.getList)
-// route.get("/usuarioUpdate/:id", controllerUsuario.getUpdate)
-// route.post("/usuarioUpdate", controllerUsuario.postUpdate)
-// route.get("/usuarioDelete/:id", controllerUsuario.getDelete)
-
 module.exports = router
