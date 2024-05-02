@@ -23,6 +23,9 @@
                 {{#if session.isAutor}}
                     <li><a href="/artigo/list">Artigo</a></li>
                 {{/if}}
+                {{#if session.isAdmin}}
+                    <li><a href="/artigo/list">Artigo</a></li>
+                {{/if}}
                 {{#if session.isAvalidador}}
                     <li><a href="/avaliar/listAll">Avaliação</a></li>
                     {{/if}}
