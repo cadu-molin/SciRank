@@ -19,7 +19,9 @@
                 <li><a href="/artigo/list">Artigo</a></li>
             </ul>
         </li>
-        <li><a href="/artigo/publicar">Publicar</a></li>
+        {{#if session.isAdmin}}
+            <li><a href="/artigo/publicar">Publicar</a></li>
+        {{/if}}
     </ul>
     <span class="material-symbols-outlined"><a href="/login/logout">Logout</a></span>
 </nav>

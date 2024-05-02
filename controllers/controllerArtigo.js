@@ -4,6 +4,25 @@ const url = require('url');
 const statusArtigoEnum = require('../enums/StatusArtigo')
 const tipoUsuarioEnum = require('../enums/TipoUsuario')
 
+async function validarAutorArtigo(user, idArtigo){
+    if(user.tipousuario === tipoUsuarioEnum.AUTOR){
+        const resArtigo = await AutorArtigo.findAll({
+            where: {
+                idArtigo: idArtigo,
+                idAutor: user.idUsuario
+            }
+        })
+
+        const autorArtigos = resArtigo.map( art => art.toJSON())
+
+        return autorArtigos.length > 0
+
+    }else{
+        return false
+    }
+
+}
+
 function getCreate(req, res) {
     res.render('artigo/artigoCreate', {options: 
         {
@@ -14,6 +33,8 @@ function getCreate(req, res) {
 }
 
 async function postCreate(req,res){
+
+    if(req.session.user.tipousuario !== tipoUsuarioEnum.AUTOR) return
 
     const {artigoTitulo, artigoResumo, artigoLink, artigoAutores} = req.body
     let artigoCriado
@@ -48,6 +69,10 @@ async function postCreate(req,res){
 }
 
 async function getDelete(req, res){
+
+    const isAutorArtigo = await validarAutorArtigo(req.session.user, req.params.idArtigo)
+    if( !(isAutorArtigo || req.session.user.tipousuario === tipoUsuarioEnum.ADMIN) ) return
+
     await Artigo.destroy({ where: { idArtigo: req.params.idArtigo } }).then(
         AutorArtigo.destroy({where: { idArtigo: req.params.idArtigo }}).then(
             res.redirect('/artigo/list')
@@ -73,6 +98,14 @@ async function getUpdate(req, res){
 async function postUpdate(req, res){
 
     const {idArtigo, artigoTitulo, artigoResumo, artigoLink, artigoAutores } = req.body
+
+    console.log('entrou')
+
+    const isAutorArtigo = await validarAutorArtigo(req.session.user, idArtigo)
+
+    if(!isAutorArtigo) return
+
+    console.log('entrou 2')
 
     const resArtigo = await Artigo.update({
         titulo: artigoTitulo,
@@ -141,6 +174,9 @@ async function postAvaliador(req, res){
 
     const {idArtigo, artigoAvaliadores } = req.body
 
+    if( req.session.user.tipousuario !== tipoUsuarioEnum.ADMIN ) return
+
+
     const resDeleteAvaliadorArtigo = await AvaliacaoArtigo.destroy({
         where: {idArtigo}
     })
@@ -164,12 +200,14 @@ async function getPublicar(req, res){
 }
 
 async function getAceitar(req, res){
+
+
     const q = url.parse(req.url, true)
     console.log(q.query)
     console.log(q.query.isAceitar)
     const isAceitar = (q.query.isAceitar === 'true' ? true : false)
 
-    console.log(isAceitar)
+    if( req.session.user.tipousuario !== tipoUsuarioEnum.ADMIN ) return
 
     const idArtigo = req.params.idArtigo
 
