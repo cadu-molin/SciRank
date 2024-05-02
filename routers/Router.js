@@ -1,6 +1,8 @@
 const express = require("express")
 const router = express.Router()
 
+const middlewares = require('../middlewares/middlewares')
+
 const artigoRouter = require("./ArtigoRouter")
 const loginRouter = require("./LoginRouter")
 const usuarioRouter = require("./UsuarioRouter")
@@ -8,24 +10,23 @@ const avaliarArtigo = require("./AvaliarArtigo")
 
 const tipoUsuario = require('../enums/TipoUsuario')
 
-function defaultPorperties(req, res, next) {
+function defaultProperties(req, res, next) {
     res.locals = {
         session: {
             isAdmin: req.session.user?.tipousuario === tipoUsuario.ADMIN,
-            isAutor: req.session.user?.tipousuario === tipoUsuario.isAutor,
-            isAvalidador: req.session.user?.tipousuario === tipoUsuario.isAvalidador,
+            isAutor: req.session.user?.tipousuario === tipoUsuario.AUTOR,
+            isAvalidador: req.session.user?.tipousuario === tipoUsuario.AVALIADOR,
         }
     }
     next()
 }
 
-router.use(defaultPorperties)
+router.use(defaultProperties, middlewares.sessionControl)
 
 router.get("/", (req,res) => {
     const userSession = { 
         ...req.session.user
     }
-
 
     if(userSession.idUsuario){
         res.render('home', { 

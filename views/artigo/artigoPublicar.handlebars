@@ -1,0 +1,28 @@
+<div>
+    <table >
+        <thead>
+            <tr>
+                <th>Titulo</th>
+                <th>Autores</th>
+                <th>Media</th>
+                {{#if session.isAdmin}}
+                <th>Aceitar</th>
+                <th>Rejeitar</th>
+                {{/if}}
+            </tr>
+        </thead>
+        <tbody>
+            {{#each artigos}}
+            <tr>
+                <td>{{titulo}}</td>
+                <td>{{nomeAutores}}</td>
+                <td>{{media}}</td>
+                {{#if ../session.isAdmin}}
+                <td><a href="/artigo/publicar/{{idArtigo}}">Aceitar</a></td>
+                <td><a href="/artigo/publicar/{{idArtigo}}">Rejeitar</a></td>
+                {{/if}}
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

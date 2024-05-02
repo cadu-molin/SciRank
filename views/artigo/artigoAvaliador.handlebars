@@ -1,0 +1,223 @@
+<div>
+    <div class="artigoCreate">
+        <form id="formAvaliadoresArtigo" action="/artigo/avaliador" method="post"> </form>
+        <span>Artigo</span>
+        <span>{{artigo.titulo}}</span>
+        <input type="hidden" name="idArtigo" id="idArtigo" value="{{artigo.idArtigo}}">
+        <br><br>
+        <span><label for="avaliadores"> Avaliadores: </label></span>
+        <span class="buscaAutor item"> 
+            <input onkeypress="inputAutoresPesquisar(event)" type="text" name="avaliadores" id="avaliadores" >
+            <div><button class="button" type="submit" onclick="onClickPesquisa()">Pesquisar</button></div>
+            <div class="popup" id="popup">
+                <div>
+                    <form id="form-pesquisa-autor">
+                        <div style="display: flex; flex-direction: row;">
+                            <input type="text" name="pesquisa" id="pesquisa" placeholder="Pesquise o Autor">
+                            <div><button class="button" type="submit" onclick="pesquisarPopup(event)" >Pesquisar</button></div>
+                        </div>
+                    </form>
+                    <table style="margin-top: 10px; color: black; cursor:pointer" id="table-autor-pesquisa">
+                        <tr class="row-vazio">
+                            <td>&ZeroWidthSpace; &ZeroWidthSpace;</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="fundo-popup" id="fundo-popup">
+                
+            </div>
+        </span>
+
+        <span class="item" style="background-color: #fff;">
+            <table  style="color: black;">
+                <tbody id="list-autor-cadastro">
+                    {{#each avaliadores}}
+                    <tr>
+                        <td class="td-autorid">{{idUsuario}}</td>
+                        <td class="td-autornome">{{nome}}</td>
+                        <td class="deletar" style="width:10%; cursor: pointer;">Deletar</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </span>
+        <span class="btn"> <input onclick="ClickedSalvar(event)" type="button" value="Salvar"> </span>
+    </div>
+</div>
+
+<script>
+    let popup = document.getElementById("popup")
+    let fundoPopup = document.getElementById("fundo-popup")
+    let inputPesquisa = document.getElementById("pesquisa")
+    let body =document.body
+    const tableAutor = document.getElementById("table-autor-pesquisa")
+
+    let tableListAutor = document.getElementById("list-autor-cadastro")
+
+    const rowstableListAutor = Array.from(tableListAutor.childNodes)
+
+    rowstableListAutor.map( element => {
+        if(element.nodeName === 'TR'){
+            const tdDeletar = element.getElementsByClassName('deletar')[0]
+            tdDeletar.addEventListener('click', ()=>deletarAutor(element))
+        }else{
+            element.remove()
+        }
+    })
+
+    async function ClickedSalvar(event){
+        event.preventDefault()
+
+        const idArtigo = Number(document.getElementById("idArtigo").value)
+        console.log(idArtigo)
+        let artigoAvaliadores
+
+        if(tableListAutor.childNodes.length > 0){
+            const arrayNode = Array.from(tableListAutor.childNodes)
+            artigoAvaliadores = arrayNode.map((child) => {
+                return Number(child.getElementsByClassName("td-autorid")[0].innerText)
+            })
+        } else{
+            artigoAvaliadores = []
+        }
+
+        if(!artigoAvaliadores){
+            return
+        }
+        if(!idArtigo){
+            return
+        }
+
+        const artigoEnviar = { idArtigo, artigoAvaliadores }
+
+        var hrefTemplate = Handlebars.compile(`{{options.hrefUpdate}}`)
+        var hrefAPI = hrefTemplate({})
+
+        const bodyEnvia = JSON.stringify(artigoEnviar) 
+
+        const response = await fetch( `${hrefAPI}`, {
+            method: 'POST',
+            headers: {"Content-type": "application/json; charset=UTF-8"},
+            body: bodyEnvia
+            
+        })
+
+
+        const data = await response.json()
+
+
+        if(response.status === 200){
+            window.location.href = '/artigo/list'
+        }
+
+    }
+
+    function onClickPesquisa(){
+        popup.classList.add("open-popup")
+        fundoPopup.classList.add("fundo-desfoque")
+    }
+    
+    async function pesquisarPopup(event){
+
+        event.preventDefault()
+
+        var hrefTemplate = Handlebars.compile(`{{options.hrefTemplate}}`)
+        var hrefAPI = hrefTemplate({})
+
+        var tipoUsuarioHdbs = Handlebars.compile(`{{options.tipoUsuarioHdbs}}`)
+        var tipoUsuario = tipoUsuarioHdbs({})
+
+        while(tableAutor.firstChild){
+            tableAutor.firstChild.remove()
+        }
+
+        const valorPesquisa = inputPesquisa.value
+
+        let notinAutor
+        if(tableListAutor.childNodes.length > 0){
+            const arrayNode = Array.from(tableListAutor.childNodes)
+            notinAutor = arrayNode.map((child) => {
+                return child.getElementsByClassName("td-autorid")[0].innerText
+            })
+        }
+
+        const notinAutorParm = !notinAutor ? '' : `&notinAutorParm=${notinAutor.join(',')}`
+        const tipoUsuarioPesquisa = `&tipousuario=${tipoUsuario}`
+
+        const response = await fetch(`${hrefAPI}?pesquisa=${valorPesquisa}${notinAutorParm}${tipoUsuarioPesquisa}`)
+        const usuarios = await response.json()
+
+        console.log(usuarios.length)
+
+        if(usuarios.length > 0) {
+            usuarios.map((usuario) => {
+                var tableRow = document.createElement('tr')
+                tableRow.innerHTML = `<td class="td-autorid">${usuario.idUsuario}</td><td class="td-autornome">${usuario.nome}</td><td class="td-autoremail">${usuario.email}</td>`
+                tableAutor.appendChild(tableRow)
+                tableRow.addEventListener('dblclick', ()=>doubleClickTable(tableRow))
+            })
+        }else{
+            tableAutor.innerHTML = `<tr><td>Nenhum resultado encontrado</td></tr>`
+        }
+
+
+    }
+
+    function fecharPopUp(){
+        popup.classList.remove("open-popup")
+        fundoPopup.classList.remove("fundo-desfoque")
+    }
+    
+    function doubleClickTable(row){ 
+
+        while(tableAutor.firstChild){
+            tableAutor.firstChild.remove()
+        }
+
+        const arr_autores = Array.from(tableListAutor.childNodes)
+        if(arr_autores.length >=3){
+            fecharPopUp()
+            return
+        }
+        
+        const autorId = row.getElementsByClassName("td-autorid")[0].innerText
+        const autorNome = row.getElementsByClassName("td-autornome")[0].innerText
+
+        var tableRowAutor = document.createElement('tr')
+        tableRowAutor.innerHTML = `<td style="width:30%;" class="td-autorid">${autorId}</td><td style="width:60%;" class="td-autornome">${autorNome}</td><td class="deletar" style="width:10%; cursor: pointer;">Deletar</td>`
+        tableListAutor.appendChild(tableRowAutor)
+        const tdDeletar = tableRowAutor.getElementsByClassName('deletar')[0]
+        tdDeletar.addEventListener('click', ()=>deletarAutor(tableRowAutor))
+
+        fecharPopUp()
+    }
+
+    function deletarAutor(row){
+        console.log(row)
+        row.remove()
+    }
+
+    function inputAutoresPesquisar(event){
+
+        if (event.key === 'Enter'){
+            onClickPesquisa()
+            inputPesquisa.value = event.target.value
+            pesquisarPopup(event)
+        }
+    }
+
+    body.addEventListener('click', (e) => {
+        if(e.target.classList[0] === 'fundo-popup'){
+            fecharPopUp()
+        }
+    })
+
+    body.addEventListener('keydown', (e) => {
+         if(e.key === 'Escape'){
+            fecharPopUp()
+         }
+        
+    })
+
+</script>

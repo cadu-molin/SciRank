@@ -1,6 +1,7 @@
-const { Artigo, AutorArtigo, Usuario } = require('../models')
+const { Artigo, AutorArtigo, Usuario, AvaliacaoArtigo } = require('../models')
 const sequelize = require('sequelize')
 const statusArtigoEnum = require('../enums/StatusArtigo')
+const tipoUsuarioEnum = require('../enums/TipoUsuario')
 
 function getCreate(req, res) {
     res.render('artigo/artigoCreate', {options: 
@@ -103,6 +104,8 @@ async function getList(req, res){
 
     if(usuario.tipousuario === 1){
         artigosUsuario = await findByUsuario(usuario.idUsuario)
+    } else if (usuario.tipousuario === 0){
+        artigosUsuario = await findAllArtigos()
     }
 
     res.render('artigo/artigoList', {
@@ -112,6 +115,147 @@ async function getList(req, res){
             hrefCreate: '/artigo/create'
         }
     })
+}
+
+async function getAvaliador(req, res){
+
+    const idArtigo = req.params.idArtigo
+
+    const artigo = await findbyPK(idArtigo)
+
+    const avaliadores = await findAvalidadoresArtigo(idArtigo)
+
+    res.render('artigo/artigoAvaliador', {
+        artigo: artigo,
+        avaliadores: avaliadores,
+        options:{
+            hrefTemplate: '/usuario/getFindAll',
+            hrefUpdate: '/artigo/avaliador',
+            tipoUsuarioHdbs: tipoUsuarioEnum.AVALIADOR,
+        }
+    })
+}
+
+async function postAvaliador(req, res){
+
+    console.log('entrou postavaliador')
+
+    const {idArtigo, artigoAvaliadores } = req.body
+
+    const resDeleteAvaliadorArtigo = await AvaliacaoArtigo.destroy({
+        where: {idArtigo}
+    })
+
+    const artigoAvaliadorInsert = artigoAvaliadores.map( (avaliador) => {
+        return { idUsuario: avaliador, idArtigo: Number(idArtigo) }
+    });
+
+    console.log(artigoAvaliadorInsert)
+
+    const resAvaliadorArtigo = await AvaliacaoArtigo.bulkCreate(artigoAvaliadorInsert)
+
+    res.status(200).send({options:{response: artigoAvaliadorInsert}})
+}
+
+async function getPublicar(req, res){
+
+    const artigos = await findByNota()
+
+    res.render('artigo/artigoPublicar', {
+        artigos:artigos
+    })
+}
+
+async function findByNota(){
+    const res = await Artigo.findAll({
+        attributes:['titulo','idArtigo'],
+        include:{
+            attributes:['idAutor'],
+            model: AutorArtigo,
+        },
+        where: {
+            status: statusArtigoEnum.REVISAO
+        }
+    })
+
+    const autorArtigos = res.map( art => art.toJSON())
+    const artigos = await Promise.all(autorArtigos.map( async (artigo) => {
+
+        const autoresBanco = await AutorArtigo.findAll({
+            where:{
+                idArtigo: artigo.idArtigo
+            },
+            include:{
+                attributes:['nome'],
+                model:Usuario
+            }
+        })
+
+        const autores = autoresBanco.map(autoresArtigo => autoresArtigo.toJSON())
+
+        const avaliadoresArtigo = await AvaliacaoArtigo.findAll({
+            where:{
+                idArtigo: artigo.idArtigo
+            }
+        })
+
+        const mediaArtigo = avaliadoresArtigo.map( avaliacao => {
+            return avaliacao.toJSON()
+        }).reduce( avaliacao => {
+            console.log('reduce')
+            console.log(avaliacao)
+            avaliacao.notaRelevancia ?? 0 * avaliacao.notaExperiencia ?? 0
+        }, 0)
+
+        console.log(mediaArtigo)
+
+        return { 
+            autores: autores, 
+            nomeAutores: autores.map( autor => autor.Usuario.nome).join(', '),
+            idArtigo: artigo.idArtigo,
+            titulo: artigo.titulo,
+            media: mediaArtigo,
+        }
+    }))
+
+    return artigos
+}
+
+async function findAllArtigos(){
+    const res = await Artigo.findAll({
+        attributes:['titulo','link', 'status','idArtigo'],
+        include:{
+            attributes:['idAutor'],
+            model: AutorArtigo,
+        },
+        
+    })
+    const autorArtigos = res.map( art => art.toJSON())
+    const artigos = await Promise.all(autorArtigos.map( async (artigo) => {
+
+        const autoresBanco = await AutorArtigo.findAll({
+            where:{
+                idArtigo: artigo.idArtigo
+            },
+            include:{
+                attributes:['nome'],
+                model:Usuario
+            }
+        })
+
+        const autores = autoresBanco.map(autoresArtigo => autoresArtigo.toJSON())
+
+        return { 
+            autores: autores, 
+            nomeAutores: autores.map( autor => autor.Usuario.nome).join(', '),
+            idArtigo: artigo.idArtigo,
+            titulo: artigo.titulo,
+            link: artigo.link,
+            status: statusArtigoEnum.toString(artigo.status),
+        }
+    }))
+
+    return artigos
 }
 
 async function findByUsuario(idUsuario){
@@ -190,6 +334,32 @@ async function findbyPK(idArtigo){
     return artigo_return
 }
 
+async function findAvalidadoresArtigo(idArtigo){
+    const resAvaliadoresArtigo = await AvaliacaoArtigo.findAll({
+        where:{
+            idArtigo: idArtigo
+        },
+        include:{
+            attributes: ['nome', 'email'],
+            model: Usuario
+        }
+    })
+
+    const avaliadoresArtigo = resAvaliadoresArtigo
+            .map( avaArt => avaArt.toJSON())
+            .map( avaArt => {
+                return {
+                    idUsuario: avaArt.idUsuario,
+                    nome: avaArt.Usuario.nome,
+                    email: avaArt.Usuario.email,
+                }
+            })
+
+    console.log(avaliadoresArtigo)
+
+    return avaliadoresArtigo
+}
+
 module.exports = {
     getCreate,
     postCreate,
@@ -197,5 +367,8 @@ module.exports = {
     getDelete,
     getUpdate,
     postUpdate,
+    getAvaliador,
+    postAvaliador,
+    getPublicar,
     findByUsuario,
 }
