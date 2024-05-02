@@ -18,6 +18,7 @@ module.exports = {
                         res.redirect('/');
                 }).catch((err) => {
                     console.log(err);
+                    res.render("erro", {mensagem: "Erro ao autenticar:\n" + err.message})
                 })
     },
     async postLogOut(req, res) {

@@ -1,25 +1,36 @@
 <nav>
     <h1><a href="/">SciRank</a></h1>
     <ul class="menu">
-        <li>
-            <a>Cadastrar</a>
-            <ul class="submenu">
-                {{#if session.isAdmin}}
-                    <li><a href="/usuario/create">Usuario</a></li>
-                {{/if}}
-                <li><a href="/artigo/create">Artigo</a></li>
-            </ul>
-        </li>
+        {{#unless session.isAvalidador}}
+            <li>
+                <a>Cadastrar</a>
+                <ul class="submenu">
+                    {{#if session.isAdmin}}
+                        <li><a href="/usuario/create">Usuario</a></li>
+                    {{/if}}
+                    {{#if session.isAutor}}
+                        <li><a href="/artigo/create">Artigo</a></li>
+                    {{/if}}
+                </ul>
+            </li>
+        {{/unless}}
         <li>
             <a>Listar</a>
             <ul class="submenu">
                 {{#if session.isAdmin}}
                     <li><a href="/usuario/listAll">Usuario</a></li>
                 {{/if}}
-                <li><a href="/artigo/list">Artigo</a></li>
+                {{#if session.isAutor}}
+                    <li><a href="/artigo/list">Artigo</a></li>
+                {{/if}}
+                {{#if session.isAvalidador}}
+                    <li><a href="/avaliar/listAll">Avaliação</a></li>
+                    {{/if}}
             </ul>
         </li>
-        <li><a href="/artigo/publicar">Publicar</a></li>
+        {{#unless session.isAvalidador}}
+            <li><a href="/artigo/publicar">Publicar</a></li>
+        {{/unless}}
     </ul>
     <span class="material-symbols-outlined"><a href="/login/logout">Logout</a></span>
 </nav>

@@ -1,9 +1,12 @@
 const { AvaliacaoArtigo, Artigo, Usuario } = require("../models")
 
-
 module.exports = {
     async listAll(req, res) {
+        console.log(req.session.user)
         AvaliacaoArtigo.findAll({
+            where: {
+                idUsuario: parseInt(req.session.user.idUsuario)             
+            },
             include: [
                 {
                     model: Artigo,
@@ -20,6 +23,7 @@ module.exports = {
             })});
         }).catch((err) => {
             console.log(err);
+            res.render("erro", {mensagem: "Erro ao carregar os dados da Avaliação:\n" + err.message})
         });
     },
     async getUpdate(req, res) {
@@ -42,6 +46,7 @@ module.exports = {
         }
         ).catch(function (err) {
             console.log(err);
+            res.render("erro", {mensagem: "Erro ao carregar os dados da Avaliação:\n" + err.message})
         });
     },
     async postUpdate(req, res) {
@@ -49,6 +54,7 @@ module.exports = {
             res.redirect('/avaliar/avaliarList')
         ).catch(function (err) {
             console.log(err);
+            res.render("erro", {mensagem: "Erro ao salvar os dados da Avaliação:\n" + err.message})
         });
     }
 }   
