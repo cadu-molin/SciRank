@@ -28,9 +28,9 @@
                     {{/if}}
             </ul>
         </li>
-        {{#unless session.isAvalidador}}
+        {{#if session.isAdmin}}
             <li><a href="/artigo/publicar">Publicar</a></li>
-        {{/unless}}
+        {{/if}}
     </ul>
     <span class="material-symbols-outlined"><a href="/login/logout">Logout</a></span>
 </nav>

@@ -18,8 +18,8 @@
                 <td>{{nomeAutores}}</td>
                 <td>{{media}}</td>
                 {{#if ../session.isAdmin}}
-                <td><a href="/artigo/publicar/{{idArtigo}}">Aceitar</a></td>
-                <td><a href="/artigo/publicar/{{idArtigo}}">Rejeitar</a></td>
+                <td><a href="/artigo/aceitar/{{idArtigo}}?isAceitar=true">Aceitar</a></td>
+                <td><a href="/artigo/aceitar/{{idArtigo}}?isAceitar=false">Rejeitar</a></td>
                 {{/if}}
             </tr>
             {{/each}}
