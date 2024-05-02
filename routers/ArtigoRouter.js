@@ -15,4 +15,6 @@ router.post('/avaliador', controllerArtigo.postAvaliador)
 router.get("/list", controllerArtigo.getList)
 router.get("/publicar", controllerArtigo.getPublicar)
 
+router.get("/aceitar/:idArtigo", controllerArtigo.getAceitar)
+
 module.exports = router

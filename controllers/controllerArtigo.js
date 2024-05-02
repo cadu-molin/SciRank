@@ -1,5 +1,6 @@
 const { Artigo, AutorArtigo, Usuario, AvaliacaoArtigo } = require('../models')
-const sequelize = require('sequelize')
+const url = require('url');
+
 const statusArtigoEnum = require('../enums/StatusArtigo')
 const tipoUsuarioEnum = require('../enums/TipoUsuario')
 
@@ -138,8 +139,6 @@ async function getAvaliador(req, res){
 
 async function postAvaliador(req, res){
 
-    console.log('entrou postavaliador')
-
     const {idArtigo, artigoAvaliadores } = req.body
 
     const resDeleteAvaliadorArtigo = await AvaliacaoArtigo.destroy({
@@ -149,8 +148,6 @@ async function postAvaliador(req, res){
     const artigoAvaliadorInsert = artigoAvaliadores.map( (avaliador) => {
         return { idUsuario: avaliador, idArtigo: Number(idArtigo) }
     });
-
-    console.log(artigoAvaliadorInsert)
 
     const resAvaliadorArtigo = await AvaliacaoArtigo.bulkCreate(artigoAvaliadorInsert)
 
@@ -164,6 +161,30 @@ async function getPublicar(req, res){
     res.render('artigo/artigoPublicar', {
         artigos:artigos
     })
+}
+
+async function getAceitar(req, res){
+    const q = url.parse(req.url, true)
+    console.log(q.query)
+    console.log(q.query.isAceitar)
+    const isAceitar = (q.query.isAceitar === 'true' ? true : false)
+
+    console.log(isAceitar)
+
+    const idArtigo = req.params.idArtigo
+
+    const statusArtigo = isAceitar ? statusArtigoEnum.ACEITO : statusArtigoEnum.REJEITADO
+
+    const resArtigo = await Artigo.update({
+        status: statusArtigo,
+        },
+        {
+            where: {idArtigo}
+        }
+    )
+
+    res.redirect('/artigo/publicar')
+
 }
 
 async function findByNota(){
@@ -193,32 +214,41 @@ async function findByNota(){
 
         const autores = autoresBanco.map(autoresArtigo => autoresArtigo.toJSON())
 
-        const avaliadoresArtigo = await AvaliacaoArtigo.findAll({
+        const resAvaliadoresArtigo = await AvaliacaoArtigo.findAll({
             where:{
                 idArtigo: artigo.idArtigo
             }
         })
 
-        const mediaArtigo = avaliadoresArtigo.map( avaliacao => {
-            return avaliacao.toJSON()
-        }).reduce( avaliacao => {
-            console.log('reduce')
-            console.log(avaliacao)
-            avaliacao.notaRelevancia ?? 0 * avaliacao.notaExperiencia ?? 0
-        }, 0)
 
-        console.log(mediaArtigo)
+        const avaliadoresArtigo = resAvaliadoresArtigo.map( avaliacao => {
+            return avaliacao.toJSON()
+        })
+
+        let somaNota
+        let mediaNota
+        if(avaliadoresArtigo.length > 0){
+            somaNota = avaliadoresArtigo.reduce( (acc, avaliacao) => {
+                return acc + ((Number(avaliacao.notaRelevancia) ?? 0) * (Number(avaliacao.notaExperiencia) ?? 0))
+            }, 0)
+            mediaNota = (somaNota ?? 0) / (avaliadoresArtigo.length ?? 0) ?? 0
+        } else{
+            mediaNota = 0
+        }
 
         return { 
             autores: autores, 
             nomeAutores: autores.map( autor => autor.Usuario.nome).join(', '),
             idArtigo: artigo.idArtigo,
             titulo: artigo.titulo,
-            media: mediaArtigo,
+            media: mediaNota,
         }
+
     }))
 
-    return artigos
+    const artigosSortNota = artigos.sort( (a, b) => b.media - a.media )
+
+    return artigosSortNota
 }
 
 async function findAllArtigos(){
@@ -370,5 +400,6 @@ module.exports = {
     getAvaliador,
     postAvaliador,
     getPublicar,
+    getAceitar,
     findByUsuario,
 }
