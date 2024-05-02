@@ -1,9 +1,20 @@
-const { AvaliacaoArtigo } = require("../models")
+const { AvaliacaoArtigo, Artigo, Usuario } = require("../models")
 
 
 module.exports = {
     async listAll(req, res) {
-        AvaliacaoArtigo.findAll().then(autorArtigo => {
+        AvaliacaoArtigo.findAll({
+            include: [
+                {
+                    model: Artigo,
+                    attributes: ['titulo']
+                },
+                {
+                    model: Usuario,
+                    attributes: ['usuario']
+                }
+            ]
+        }).then(autorArtigo => {
             res.render('avaliar/avaliarList', { avaliacao: autorArtigo.map((artigo) => {
                 artigo.toJSON()
             })});
@@ -12,7 +23,18 @@ module.exports = {
         });
     },
     async getUpdate(req, res) {
-        await AvaliacaoArtigo.findByPk(req.params.idAvaliacao).then(
+        await AvaliacaoArtigo.findByPk(req.params.idAvaliacao, {
+            include: [
+                {
+                    model: Artigo,
+                    attributes: ['titulo']
+                },
+                {
+                    model: Usuario,
+                    attributes: ['usuario']
+                }
+            ]
+        }).then(
             avaliar => { 
                 res.render('avaliar/avaliarCreate', {
                     avaliar: avaliar.dataValues
